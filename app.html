@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoicing Application 2023</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+
+<body>
+  <nav class="nav">
+    <div class="nav-logo">
+        <p>Entirety Invoice</p>
+    </div>
+    <div class="nav-menu" id="navMenu">
+        <ul>
+            <li><a href="index.html" class="link active">Home</a></li>
+            <li><a href="#" class="link">About</a></li>
+            <li><a href="#" class="link">Services</a></li>
+            <li><a href="app.html" class="link">Try Invoicer</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="main-content">
+  <section class="main-form-section">
+      <div class="container">
+          <div class="main-form">
+            <h1>Entirety Invoice</h1>
+                <form id="invoiceForm">
+                  <label for="clientName">Client Name:</label>
+                  <input type="text" id="clientName" required>
+                  <label for="phoneNumber">Phone Number:</label>
+                  <input type="text" id="phoneNumber" required>
+                  <label for="itemName">Item Name:</label>
+                  <input type="text" id="itemName" >
+                  <label for="unitPrice">Unit Price:</label>
+                  <input type="number" id="unitPrice">
+                  <label for="quantity">Quantity:</label>
+                  <input type="number" id="quantity" >
+                  <button type="button" onclick="addItem()">Add Item</button>
+                    <div id="itemsList">
+                       <!-- Items will be displayed here -->
+                    </div>
+                      <p>Total Amount: Ksh.<span id="totalAmount">0.00</span></p>
+                  <button type="submit" id="submitInvoice">Generate Invoice</button>
+                </form>
+          </div>
+                <div class="invoice-preview" id="invoicePreview">
+                 <!-- Invoice details will be displayed here -->
+                </div>
+        </div>
+    </div>
+    <div class="invoice-preview" id="invoicePreview">
+        <!-- Invoice details will be displayed here -->
+        <button class="btn_d" id="downloadInvoice">Download Invoice</button>
+    </div>
+
+
+  </section>
+      <button class="btn btn-primary" id="downloadInvoice">Download Invoice</button>
+  <script src="script.js">
+  </script>
+<!-- Include the jsPDF library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+<script>
+  // Function to download the invoice preview as a PDF
+  function downloadInvoice() {
+    // Get the invoice preview element
+    const invoicePreview = document.getElementById('invoicePreview');
+
+    // Create a new jsPDF instance
+    const doc = new jsPDF();
+
+    // Start Y position for the PDF content
+    let yPos = 20;
+
+    // Add the "Your Invoice" heading
+    doc.setFontSize(20);
+    doc.text('Your Invoice', 85, yPos);
+    yPos += 15;
+
+    // Add a separator line
+    doc.setLineWidth(0.5);
+    doc.line(20, yPos, 190, yPos);
+    yPos += 10;
+
+    // Extract the HTML content from the invoicePreview element
+    const contentElement = invoicePreview.cloneNode(true);
+    const tempDiv = document.createElement('div');
+    tempDiv.appendChild(contentElement);
+    const previewContent = tempDiv.innerHTML;
+
+    // Add the rest of the invoice content
+    doc.fromHTML(previewContent, 20, yPos, {
+      width: 170,
+    });
+
+    // Save the PDF to the user's computer
+    doc.save('invoice.pdf');
+  }
+
+  // Add click event listener to the "Download Invoice" button
+  document.getElementById('downloadInvoice').addEventListener('click', downloadInvoice);
+</script>
+
+
+
+
+</body>
+</html>
